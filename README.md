@@ -27,12 +27,16 @@ original app advertises). The visual before/after preview is rendered locally.
   and a budget tip, grounded in your actual photo.
 - **Before / after slider** for the local style preview.
 - **Local gallery** — save designs; everything is stored on your device.
-- **Two generation engines**
+- **Three generation engines**
   - **Demo (offline)** — restyles the photo locally with colour grading. Works
     with zero setup, no account, no internet. This is the default.
   - **Claude** — sends the photo to Claude's vision model for a full design
     plan. Requires your own Anthropic API key (stored locally only). Choose
     between Claude Opus 5, Sonnet 5, or Haiku 4.5.
+  - **Gemini image ("Nano Banana")** — edits your actual photo into the chosen
+    style while keeping the room's structure, using Google's
+    `gemini-2.5-flash-image`. Requires a Google AI Studio API key (free tier
+    available), stored locally only.
 - **Light / dark / system** themes.
 
 ## Getting started
@@ -69,7 +73,8 @@ src/
 │  ├─ store.ts        Persistent settings + gallery (electron-store)
 │  └─ ai/             Generation providers
 │     ├─ index.ts     Dispatcher
-│     └─ claude.ts    Claude vision → structured design plan (@anthropic-ai/sdk)
+│     ├─ claude.ts    Claude vision → structured design plan (@anthropic-ai/sdk)
+│     └─ gemini.ts    Gemini 2.5 Flash Image → edited photo (REST)
 ├─ preload/           contextBridge — the only surface the renderer can call
 └─ renderer/          React UI
    ├─ data/           Category + style-preset library

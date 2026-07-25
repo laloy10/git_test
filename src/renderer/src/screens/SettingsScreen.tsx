@@ -23,10 +23,20 @@ export function SettingsScreen(): JSX.Element {
   const [showKey, setShowKey] = useState(false)
   const [savedKey, setSavedKey] = useState(false)
 
+  const [gKey, setGKey] = useState(settings.geminiApiKey)
+  const [showGKey, setShowGKey] = useState(false)
+  const [savedGKey, setSavedGKey] = useState(false)
+
   const saveKey = async (): Promise<void> => {
     await updateSettings({ anthropicApiKey: key.trim() })
     setSavedKey(true)
     setTimeout(() => setSavedKey(false), 1600)
+  }
+
+  const saveGKey = async (): Promise<void> => {
+    await updateSettings({ geminiApiKey: gKey.trim() })
+    setSavedGKey(true)
+    setTimeout(() => setSavedGKey(false), 1600)
   }
 
   return (
@@ -40,20 +50,29 @@ export function SettingsScreen(): JSX.Element {
         <div className="field" style={{ marginBottom: 0 }}>
           <label>Generation engine</label>
           <div className="seg">
-            {(['demo', 'claude'] as AiProvider[]).map((p) => (
+            {(
+              [
+                ['demo', 'Demo (offline)'],
+                ['claude', 'Claude (plan)'],
+                ['gemini', 'Gemini (image)']
+              ] as Array<[AiProvider, string]>
+            ).map(([p, label]) => (
               <button
                 key={p}
                 className={settings.provider === p ? 'active' : ''}
                 onClick={() => updateSettings({ provider: p })}
               >
-                {p === 'demo' ? 'Demo (offline)' : 'Claude'}
+                {label}
               </button>
             ))}
           </div>
           <div className="hint">
-            {settings.provider === 'demo'
-              ? 'Demo mode restyles your photo locally with colour grading — no account or internet needed. Great for trying the app.'
-              : 'Claude studies your photo and writes a tailored AI design plan (palette, key changes, materials, furnishings). The visual preview is still rendered locally. Requires an Anthropic API key.'}
+            {settings.provider === 'demo' &&
+              'Demo mode restyles your photo locally with colour grading — no account or internet needed. Great for trying the app.'}
+            {settings.provider === 'claude' &&
+              'Claude studies your photo and writes a tailored AI design plan (palette, key changes, materials, furnishings). The visual preview is rendered locally. Requires an Anthropic API key.'}
+            {settings.provider === 'gemini' &&
+              'Gemini 2.5 Flash Image ("Nano Banana") edits your actual photo into the chosen style, keeping the room’s structure. Requires a Google AI Studio API key (free tier available).'}
           </div>
         </div>
       </div>
@@ -112,6 +131,42 @@ export function SettingsScreen(): JSX.Element {
             </div>
           </div>
         </>
+      )}
+
+      {settings.provider === 'gemini' && (
+        <div className="panel" style={{ marginBottom: 20 }}>
+          <div className="field" style={{ marginBottom: 0 }}>
+            <label>Google (Gemini) API key</label>
+            <div className="row">
+              <input
+                className="input"
+                type={showGKey ? 'text' : 'password'}
+                placeholder="AIza…"
+                value={gKey}
+                onChange={(e) => setGKey(e.target.value)}
+              />
+              <button
+                className="btn btn-ghost"
+                onClick={() => setShowGKey((v) => !v)}
+                title={showGKey ? 'Hide' : 'Show'}
+              >
+                {showGKey ? <EyeOff size={16} /> : <Eye size={16} />}
+              </button>
+              <button className="btn btn-primary" onClick={saveGKey}>
+                {savedGKey ? <Check size={16} /> : null}
+                {savedGKey ? 'Saved' : 'Save'}
+              </button>
+            </div>
+            <div className="hint">
+              Free to create. Stored locally on this device only, and used from the app&apos;s
+              background process — never exposed to the page. Get a key at{' '}
+              <a href="https://aistudio.google.com/apikey" target="_blank" rel="noreferrer">
+                aistudio.google.com/apikey{' '}
+                <ExternalLink size={11} style={{ verticalAlign: 'middle' }} />
+              </a>
+            </div>
+          </div>
+        </div>
       )}
 
       <div className="panel">

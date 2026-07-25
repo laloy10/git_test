@@ -39,7 +39,8 @@ export function Sidebar(): JSX.Element {
       <div className="sidebar-spacer" />
 
       <div className="sidebar-foot">
-        Mode: <strong>{provider === 'demo' ? 'Demo' : 'Claude'}</strong>
+        Mode:{' '}
+        <strong>{provider === 'demo' ? 'Demo' : provider === 'claude' ? 'Claude' : 'Gemini'}</strong>
         <br />
         v1.0.0
       </div>

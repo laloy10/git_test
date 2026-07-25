@@ -3,7 +3,7 @@
  * Keeping these in one place guarantees the IPC contract stays in sync.
  */
 
-export type AiProvider = 'demo' | 'claude'
+export type AiProvider = 'demo' | 'claude' | 'gemini'
 
 /** Claude models offered in the app. */
 export type ClaudeModel = 'claude-opus-5' | 'claude-sonnet-5' | 'claude-haiku-4-5'
@@ -14,6 +14,8 @@ export interface AppSettings {
   provider: AiProvider
   anthropicApiKey: string
   model: ClaudeModel
+  /** Google AI Studio API key for the Gemini image engine ("Nano Banana"). */
+  geminiApiKey: string
   theme: ThemeMode
 }
 
@@ -70,9 +72,11 @@ export interface GenerateRequest {
 
 export interface GenerateSuccess {
   ok: true
-  /** Claude's structured redesign concept for the space. */
-  recommendation: DesignRecommendation
   provider: AiProvider
+  /** An AI-generated redesign image (Gemini), as a data URL. */
+  imageDataUrl?: string
+  /** Claude's structured redesign concept for the space. */
+  recommendation?: DesignRecommendation
 }
 
 export interface GenerateFailure {

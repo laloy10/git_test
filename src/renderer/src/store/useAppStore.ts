@@ -41,7 +41,13 @@ function uid(): string {
 export const useAppStore = create<AppState>((set, get) => ({
   ready: false,
   route: 'home',
-  settings: { provider: 'demo', anthropicApiKey: '', model: 'claude-opus-5', theme: 'system' },
+  settings: {
+    provider: 'demo',
+    anthropicApiKey: '',
+    model: 'claude-opus-5',
+    geminiApiKey: '',
+    theme: 'system'
+  },
   projects: [],
 
   categoryId: 'interior',

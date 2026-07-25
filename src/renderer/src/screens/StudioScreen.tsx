@@ -72,7 +72,8 @@ export function StudioScreen(): JSX.Element {
                 <strong>Redesigning your {category.name.toLowerCase()}…</strong>
                 <div style={{ fontSize: 13 }}>
                   Applying the {selectedStyle?.name} style
-                  {settings.provider === 'claude' ? ' · Claude is drafting your design plan' : ''}
+                  {settings.provider === 'claude' && ' · Claude is drafting your design plan'}
+                  {settings.provider === 'gemini' && ' · Gemini is editing your photo'}
                 </div>
               </div>
             </div>
@@ -140,9 +141,12 @@ export function StudioScreen(): JSX.Element {
           </button>
 
           <p className="engine-note">
-            {settings.provider === 'claude'
-              ? 'Claude analyses your photo and writes a tailored design plan; the preview is a local style render.'
-              : 'Demo mode renders a local style preview. Switch to Claude in Settings for AI design plans.'}
+            {settings.provider === 'claude' &&
+              'Claude analyses your photo and writes a tailored design plan; the preview is a local style render.'}
+            {settings.provider === 'gemini' &&
+              'Gemini ("Nano Banana") edits your actual photo into the chosen style, keeping the room’s structure.'}
+            {settings.provider === 'demo' &&
+              'Demo mode renders a local style preview. Switch to Claude or Gemini in Settings for real AI output.'}
           </p>
         </div>
       </div>

@@ -8,12 +8,22 @@ export type RunResult =
 /**
  * Front-end generation entry point.
  *
- * The visual before/after preview is always produced locally (offline canvas
- * stylisation). With the Claude engine we additionally ask Claude — through the
- * main process, where the API key lives — for a structured design plan for the
- * space.
+ * - Demo: an offline local style render (canvas colour grading).
+ * - Claude: local style render + a structured AI design plan from Claude.
+ * - Gemini ("Nano Banana"): a real AI-edited image of the space.
+ *
+ * Cloud engines run through the main process, where the API key lives.
  */
 export async function runGeneration(provider: string, req: GenerateRequest): Promise<RunResult> {
+  // Gemini returns the actual redesigned image — no local preview needed.
+  if (provider === 'gemini') {
+    const res = await window.api.generate(req)
+    if (!res.ok) return { ok: false, error: res.error }
+    if (!res.imageDataUrl) return { ok: false, error: 'Gemini returned no image.' }
+    return { ok: true, imageDataUrl: res.imageDataUrl }
+  }
+
+  // Demo and Claude both use the local style render for the visual preview.
   let imageDataUrl: string
   try {
     imageDataUrl = await generateDemo(req.imageDataUrl, req.style)

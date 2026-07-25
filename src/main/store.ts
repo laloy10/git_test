@@ -11,6 +11,7 @@ const defaults: Schema = {
     provider: 'demo',
     anthropicApiKey: '',
     model: 'claude-opus-5',
+    geminiApiKey: '',
     theme: 'system'
   },
   projects: []
