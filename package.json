@@ -1,7 +1,7 @@
 {
   "name": "home-ai-studio",
   "version": "1.0.0",
-  "description": "Redesign any space with AI — snap a photo, pick a style, and preview your room, garden, or exterior transformed. Desktop app.",
+  "description": "Redesign any space with AI — snap a photo, pick a style, and get a tailored design plan from Claude for your room, garden, or exterior. Desktop app.",
   "author": "Home AI Studio",
   "license": "MIT",
   "main": "./out/main/index.js",
@@ -20,6 +20,7 @@
     "dist": "npm run build && electron-builder"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.68.0",
     "electron-store": "^8.2.0",
     "electron-updater": "^6.3.9"
   },

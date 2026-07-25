@@ -39,7 +39,7 @@ export function Sidebar(): JSX.Element {
       <div className="sidebar-spacer" />
 
       <div className="sidebar-foot">
-        Mode: <strong>{provider === 'demo' ? 'Demo' : 'OpenAI'}</strong>
+        Mode: <strong>{provider === 'demo' ? 'Demo' : 'Claude'}</strong>
         <br />
         v1.0.0
       </div>

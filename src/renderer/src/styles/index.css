@@ -670,6 +670,117 @@ img {
   font-size: 14px;
 }
 
+/* ---------- Engine note ---------- */
+.engine-note {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--text-faint);
+}
+
+/* ---------- Model list (settings) ---------- */
+.model-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.model-card {
+  text-align: left;
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+  background: var(--bg);
+  transition: border-color 0.12s, background 0.12s;
+}
+.model-card:hover {
+  border-color: var(--border-strong);
+}
+.model-card.active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+/* ---------- Design plan ---------- */
+.plan {
+  background: var(--bg-elev);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 26px;
+}
+.plan-head h3 {
+  margin: 12px 0 6px;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+.plan-head p {
+  margin: 0;
+  color: var(--text-dim);
+  font-size: 14px;
+  line-height: 1.6;
+  max-width: 68ch;
+}
+.plan-block {
+  margin-top: 22px;
+}
+.plan-block h5 {
+  margin: 0 0 10px;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+.plan-block ul {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.plan-block li {
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--text);
+}
+.plan-tip p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text);
+  padding: 12px 14px;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.palette {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.palette-chip {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 96px;
+}
+.palette-swatch {
+  height: 46px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.palette-name {
+  font-size: 12px;
+  font-weight: 600;
+}
+.palette-hex {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-variant-numeric: tabular-nums;
+  text-transform: uppercase;
+}
+
 .row {
   display: flex;
   gap: 10px;

@@ -5,15 +5,18 @@ import { useAppStore } from '../store/useAppStore'
 import { BeforeAfter } from '../components/BeforeAfter'
 import { UploadZone } from '../components/UploadZone'
 import { CategoryIcon } from '../components/CategoryIcon'
+import { DesignPlan } from '../components/DesignPlan'
 
 export function StudioScreen(): JSX.Element {
   const {
     categoryId,
     sourceImage,
     resultImage,
+    recommendation,
     selectedStyle,
     generating,
     error,
+    settings,
     setSourceImage,
     selectStyle,
     generate,
@@ -67,7 +70,10 @@ export function StudioScreen(): JSX.Element {
               <div className="spinner" />
               <div>
                 <strong>Redesigning your {category.name.toLowerCase()}…</strong>
-                <div style={{ fontSize: 13 }}>Applying the {selectedStyle?.name} style</div>
+                <div style={{ fontSize: 13 }}>
+                  Applying the {selectedStyle?.name} style
+                  {settings.provider === 'claude' ? ' · Claude is drafting your design plan' : ''}
+                </div>
               </div>
             </div>
           )}
@@ -132,8 +138,20 @@ export function StudioScreen(): JSX.Element {
             <Sparkles size={16} />
             {generating ? 'Generating…' : 'Generate design'}
           </button>
+
+          <p className="engine-note">
+            {settings.provider === 'claude'
+              ? 'Claude analyses your photo and writes a tailored design plan; the preview is a local style render.'
+              : 'Demo mode renders a local style preview. Switch to Claude in Settings for AI design plans.'}
+          </p>
         </div>
       </div>
+
+      {recommendation && !generating && (
+        <div className="mt-24">
+          <DesignPlan plan={recommendation} />
+        </div>
+      )}
     </div>
   )
 }

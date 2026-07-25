@@ -1,19 +1,19 @@
 import type { GenerateRequest, GenerateResult } from '../../shared/types'
 import { getSettings } from '../store'
-import { generateWithOpenAI } from './openai'
+import { generateWithClaude } from './claude'
 
 /**
  * Dispatch a generation request to the configured provider.
  *
  * Demo mode is handled entirely in the renderer (offline canvas stylisation),
- * so this is only reached for real cloud providers such as OpenAI.
+ * so this is only reached for the Claude engine.
  */
 export async function generate(req: GenerateRequest): Promise<GenerateResult> {
   const settings = getSettings()
 
   switch (settings.provider) {
-    case 'openai':
-      return generateWithOpenAI(req, settings.openaiApiKey)
+    case 'claude':
+      return generateWithClaude(req, settings.anthropicApiKey, settings.model)
     case 'demo':
     default:
       return {

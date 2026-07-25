@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import type { AppSettings, Project, StylePreset } from '../../../shared/types'
+import type { AppSettings, DesignRecommendation, Project, StylePreset } from '../../../shared/types'
 import { CATEGORIES } from '../data/categories'
 import { runGeneration } from '../lib/ai'
 
@@ -16,6 +16,7 @@ interface AppState {
   sourceImage: string | null
   selectedStyle: StylePreset | null
   resultImage: string | null
+  recommendation: DesignRecommendation | null
   generating: boolean
   error: string | null
 
@@ -40,13 +41,14 @@ function uid(): string {
 export const useAppStore = create<AppState>((set, get) => ({
   ready: false,
   route: 'home',
-  settings: { provider: 'demo', openaiApiKey: '', theme: 'system' },
+  settings: { provider: 'demo', anthropicApiKey: '', model: 'claude-opus-5', theme: 'system' },
   projects: [],
 
   categoryId: 'interior',
   sourceImage: null,
   selectedStyle: null,
   resultImage: null,
+  recommendation: null,
   generating: false,
   error: null,
 
@@ -67,11 +69,13 @@ export const useAppStore = create<AppState>((set, get) => ({
       route: 'studio',
       selectedStyle: category?.styles[0] ?? null,
       resultImage: null,
+      recommendation: null,
       error: null
     })
   },
 
-  setSourceImage: (dataUrl) => set({ sourceImage: dataUrl, resultImage: null, error: null }),
+  setSourceImage: (dataUrl) =>
+    set({ sourceImage: dataUrl, resultImage: null, recommendation: null, error: null }),
 
   selectStyle: (style) => set({ selectedStyle: style, error: null }),
 
@@ -80,7 +84,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     if (!sourceImage || !selectedStyle) return
 
     const category = CATEGORIES.find((c) => c.id === categoryId)
-    set({ generating: true, error: null, resultImage: null })
+    set({ generating: true, error: null, resultImage: null, recommendation: null })
 
     const res = await runGeneration(settings.provider, {
       imageDataUrl: sourceImage,
@@ -90,14 +94,18 @@ export const useAppStore = create<AppState>((set, get) => ({
     })
 
     if (res.ok) {
-      set({ resultImage: res.imageDataUrl, generating: false })
+      set({
+        resultImage: res.imageDataUrl,
+        recommendation: res.recommendation ?? null,
+        generating: false
+      })
     } else {
       set({ error: res.error, generating: false })
     }
   },
 
   saveCurrentToGallery: async () => {
-    const { sourceImage, resultImage, selectedStyle, categoryId, settings } = get()
+    const { sourceImage, resultImage, recommendation, selectedStyle, categoryId, settings } = get()
     if (!sourceImage || !resultImage || !selectedStyle) return
 
     const category = CATEGORIES.find((c) => c.id === categoryId)
@@ -110,6 +118,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       styleName: selectedStyle.name,
       beforeImage: sourceImage,
       afterImage: resultImage,
+      recommendation: recommendation ?? undefined,
       provider: settings.provider
     }
     const projects = await window.api.addProject(project)
@@ -117,7 +126,13 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   resetStudio: () =>
-    set({ sourceImage: null, resultImage: null, error: null, generating: false }),
+    set({
+      sourceImage: null,
+      resultImage: null,
+      recommendation: null,
+      error: null,
+      generating: false
+    }),
 
   updateSettings: async (patch) => {
     const settings = await window.api.saveSettings(patch)

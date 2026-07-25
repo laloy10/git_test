@@ -9,7 +9,8 @@ interface Schema {
 const defaults: Schema = {
   settings: {
     provider: 'demo',
-    openaiApiKey: '',
+    anthropicApiKey: '',
+    model: 'claude-opus-5',
     theme: 'system'
   },
   projects: []
